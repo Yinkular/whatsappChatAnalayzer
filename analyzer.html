@@ -1,0 +1,82 @@
+<!Doctype html>
+<html>
+	<head>
+		<title>ANALYZER</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="index.css">
+		<link rel="stylesheet" href="uploadPage.css">
+		<link rel="stylesheet" href="analysisArea.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+		
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="uploadFile.js"></script>
+		<meta name="viewport" content="width=device-width initial-scale=1" >
+	</head>
+	
+	<body class="container-fluid">
+		<div class="row" id="title-area">
+			<p> <h1 class="text-center" id="header-text"> ~ANALYZER~</h1></p>
+		</div>
+		
+		<div class="row uploadArea col-md-12">
+			<label class="uploadLabel">
+				<input id="uploadFile" type="file" accept=".txt" />
+				<i class="fa fa-cloud-upload fa-3x"></i>
+			</label>
+		</div>
+		
+		<div class="row hide col-md-12" id="analysisArea">
+			<div class="row" id="participantArea">
+				<div class="col-md-3">
+					<table>
+						<tr>
+							<th></th>
+							<th >Message Count</th>
+							<th >Word Count</th>
+						</tr>
+						<tr>
+							<td class ="name" id="participant1"></td>
+							<td id="participant1-MC"></td>
+							<td  id="participant1-WC"></td>
+						</tr>
+						<tr>
+							<td class="name" id="participant2"></td>
+							<td id="participant2-MC"></td>
+							<td id="participant2-WC"></td>
+						</tr>
+					</table>
+				
+				</div>
+				
+				<div id="messagePie" style="width: 425px; height: 300px;" class="col-md-3"></div>
+				<div id="wordPie" style="width: 425px; height: 300px;" class="col-md-3"></div>
+			</div>
+			<hr>
+				
+			<div id="wordsArea">
+				<h2>WORDS ANALYSIS</h2>
+				<div class="row col-md-12">
+					<div class="col-md-3">
+						<h4 id="uniqueWord"> TOTAL UNIQUE WORDS: </h4>
+					</div>
+					<div class="col-md-3">
+						<h4 id="modalWord"> MOST USED WORD:   
+						</h4>
+					</div>
+					<div id="wordsBar" style="width: 700px; height: 400px;" class="col-md-6" ></div>
+				</div>
+			</div>
+			<hr>
+			
+			<div id="timeArea">
+				<h2>TIME ANALYSIS</h2>
+				<div class="row col-md-12" id="timeBar" style="width: 1200px; height: 400px;" ></div>
+			</div>
+		</div>
+		
+	</body>
+</html>

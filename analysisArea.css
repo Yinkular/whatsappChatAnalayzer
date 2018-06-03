@@ -1,0 +1,18 @@
+th
+{
+	padding: 15px;
+	font-size:15px;
+}
+
+td
+{
+	text-align:right;
+	padding: 15px;
+	border: 1px dotted black;
+}
+
+.name
+{
+	font-size:20px;
+	font-style: bold;
+}
