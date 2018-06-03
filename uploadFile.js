@@ -376,21 +376,18 @@ function drawCountPieChart()
 
 function drawBarChartWords()
 {
-	var data = google.visualization.arrayToDataTable([
-		 ['Word', 'Frequency',{ role: 'style' }],
-		 [sortedFrequencyValue[0][0], sortedFrequencyValue[0][1], 'black'],           
-		 [sortedFrequencyValue[1][0], sortedFrequencyValue[1][1], 'black'],  
-		 [sortedFrequencyValue[2][0], sortedFrequencyValue[2][1], 'black'],  
-		 [sortedFrequencyValue[3][0], sortedFrequencyValue[3][1], 'black'],  
-		 [sortedFrequencyValue[4][0], sortedFrequencyValue[4][1], 'black'],  
-		 [sortedFrequencyValue[5][0], sortedFrequencyValue[5][1], 'black'],  
-		 [sortedFrequencyValue[6][0], sortedFrequencyValue[6][1], 'black'],  
-		 [sortedFrequencyValue[7][0], sortedFrequencyValue[7][1], 'black'],  
-		 [sortedFrequencyValue[8][0], sortedFrequencyValue[8][1], 'black'],  
-		 [sortedFrequencyValue[9][0], sortedFrequencyValue[9][1], 'black'],  
-		 [sortedFrequencyValue[10][0], sortedFrequencyValue[10][1], 'black']
-    ]);
+	var data = new google.visualization.DataTable();
 	
+	data.addColumn('string', 'Word');
+    data.addColumn('number', 'Frequency');
+	data.addColumn({type: 'string', role: 'style'});
+	
+	
+	for(var i=0;i<10;i++)
+	{
+		data.addRow([sortedFrequencyValue[i][0], sortedFrequencyValue[i][1], 'black']);
+	}
+
 	var options = {
         title: "FREQUENCY OF WORDS",
         bar: {groupWidth: "70%"},
@@ -403,33 +400,17 @@ function drawBarChartWords()
 
 function drawBarChartTime()
 {
-	var data = google.visualization.arrayToDataTable([
-		 ['Time', 'NO OF MESSAGES',{ role: 'style' }],
-		 ["12 AM", dateData.time["12 AM"], 'black'],
-		 ["1 AM", dateData.time["1 AM"], 'black'],
-		 ["2 AM", dateData.time["2 AM"], 'black'],
-		 ["3 AM", dateData.time["3 AM"], 'black'],
-		 ["4 AM", dateData.time["4 AM"], 'black'],
-		 ["5 AM", dateData.time["5 AM"], 'black'],
-		 ["6 AM", dateData.time["6 AM"], 'black'],
-		 ["7 AM", dateData.time["7 AM"], 'black'],
-		 ["8 AM", dateData.time["8 AM"], 'black'],
-		 ["9 AM", dateData.time["9 AM"], 'black'],
-		 ["10 AM", dateData.time["10 AM"], 'black'],
-		 ["11 AM", dateData.time["11 AM"], 'black'],
-		 ["12 PM", dateData.time["12 PM"], 'black'],
-		 ["1 PM", dateData.time["1 PM"], 'black'],
-		 ["2 PM", dateData.time["2 PM"], 'black'],
-		 ["3 PM", dateData.time["3 PM"], 'black'],
-		 ["4 PM", dateData.time["4 PM"], 'black'],
-		 ["5 PM", dateData.time["5 PM"], 'black'],
-		 ["6 PM", dateData.time["6 PM"], 'black'],
-		 ["7 PM", dateData.time["7 PM"], 'black'],
-		 ["8 PM", dateData.time["8 PM"], 'black'],
-		 ["9 PM", dateData.time["9 PM"], 'black'],
-		 ["10 PM", dateData.time["10 PM"], 'black'],
-		 ["11 PM", dateData.time["11 PM"], 'black'] 
-	]);
+	
+	var data = new google.visualization.DataTable();
+	
+	data.addColumn('string', 'Time');
+    data.addColumn('number', 'NO OF MESSAGES');
+	data.addColumn({type: 'string', role: 'style'});
+	
+	for(time in dateData.time)
+	{
+		data.addRow([time,dateData.time[time],'black']);
+	}
 	
 	var options = {
 		title: "TIME/MESSAGE FREQUENCY",
