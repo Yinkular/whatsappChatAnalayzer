@@ -3,3 +3,12 @@
 	font-family: 'Oswald', sans-serif;
 	color: #000000 ;
 }
+
+#footer {
+	position:absolute;
+	bottom:0px;
+}
+
+#footer-text{
+	text-align:center;
+}
