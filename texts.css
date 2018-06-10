@@ -1,0 +1,41 @@
+#header-text
+{
+	font-family: 'Orbitron', sans-serif;
+	font-style:bold;
+	font-size:50px;
+}
+
+.string
+{
+	font-family: 'Orbitron', sans-serif;
+}
+
+.number
+{
+	font-family: 'Orbitron', sans-serif;
+}
+
+.top
+{
+	text-align:center;
+}
+
+.base
+{
+	text-align:center;
+}
+
+#timeSpan
+{
+	text-align:center;
+}
+
+.segmentHead
+{
+	text-align:center;
+}
+
+.words
+{
+	
+}

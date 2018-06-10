@@ -1,0 +1,229 @@
+<!Doctype html>
+<html>
+	<head>
+		<title>ANALYZER</title>
+		<meta charset="utf-8">
+		<!--css-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron" >
+		<link rel="stylesheet" href="texts.css">
+		<link rel="stylesheet" href="segments.css">
+		
+		<!--scripts-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="uploadFile.js"></script>
+		
+	</head>
+	
+	<body class="container-fluid">
+	
+		<div class="row" id="title-area">
+			<p> <h1 class="text-center string" id="header-text"> ~ANALYZER~</h1></p>
+		</div>
+		
+		<div class="" id="main-area">
+		
+			<div class="uploadArea">
+				<label class="uploadLabel">
+					<input id="uploadFile" type="file" accept=".txt" />
+					<i class="fa fa-cloud-upload fa-3x"></i>
+				</label>
+			</div>
+			
+			<!--Analysis area-->
+			<div class="row hide" id="analysisArea">
+				<div clas="row col-md-12" id="innerAnalysisArea">
+					<!--shows duration message-->
+					<div class="row segment" id="timeSpan">
+						<h2 class="string" id="time"></h2>
+					</div>
+					<!--end duration-->
+					<hr>
+					
+					<!--shows overview of chat-->
+					<div class="row segment" id="overview">
+						<h2 class="string segmentHead">OVERVIEW</h2>
+						
+						<div class="row col-md-12">
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="noOfParticpants"></h3>
+									<h4 class="string base"> PARTICIPANTS </h4>
+								</div>
+							</div>
+							
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="noOfMessages"></h3>
+									<h4 class="string base"> MESSAGES </h4>
+								</div>
+							</div>
+							
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="noOfWords"></h3>
+									<h4 class="string base"> WORDS </h4>
+								</div>
+							</div>
+							
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="avgMessagesDay"></h3>
+									<h4 class="string base"> MSG/DAY </h4>
+								</div>
+							</div>
+							
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="avgMessagesMonth"></h3>
+									<h4 class="string base"> MSG/MONTH </h4>
+								</div>
+								
+							</div>
+							
+							<div class="col-md-2">
+								<div class="row">
+									<h3 class="number top" id="streak"></h3>
+									<h4 class="string base"> STREAK </h4>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row col-md-12">
+							<div class="col-md-4 hide" id="groupCreator">
+								<h3 class="number top" id="creator"></h3>
+								<h4 class="string base"> CREATOR </h4>
+							</div>
+							
+							<div class="col-md-4 hide" id="groupName">
+								<h3 class="number top" id="nameOfGroup"></h3>
+								<h4 class="string base"> GROUP NAME</h4>
+							</div>
+							
+							<div class="col-md-1">
+								<h3 class="number top" id="noOfMedia"></h3>
+								<h4 class="string base"> MEDIA </h4>
+							</div>
+							
+							<div class="col-md-2">
+								<h3 class="number top" id="noOfEmojis"></h3>
+								<h4 class="string base"> EMOJIS </h4>
+							</div>
+							
+							<div class="col-md-1 hide" id="exits">
+								<h3 class="number top" id="noOfExits"></h3>
+								<h4 class="string base"> EXITS </h4>
+							</div>
+						</div>
+						
+					</div>
+					<!--end overview-->
+					<hr>
+				
+					<!-- message analysis-->
+					<div class="row segment" id="messageAnalysis">
+						<h2 class="string segmentHead">MESSAGE ANALYSIS</h2>
+						
+						<!-- most messages-->
+						<div class="row smallSubSegment">
+							<div class="col-md-2"> </div>
+							<div class="col-md-4 wordsDiv">
+								<h3 class="string top words" id="mostMessages">MOST MESSAGES: </h3>
+								<h4 class="string base words" id="mostMessagesPartcipant"> </h4>
+							</div>
+							<div class="col-md-6 chart" id="messageCountChart" >
+							</div>
+						</div>
+						
+						<!-- most words -->
+						<div class="row smallSubSegment"  >
+							<div class="col-md-2"> </div>
+							<div class="col-md-4 wordsDiv"  >
+								<h3 class="string top" id="mostWords">MOST WORDS: </h3>
+								<h4 class="string base" id="mostWordsPartcipant">  </h4>
+							</div>
+							<div class="col-md-6 chart" id="wordsCountChart">
+							</div>
+						</div>
+						
+						<!-- words frequency chat
+						<div class="row subSegment">
+							<div class="row" id="wordsChart">
+							</div>
+						</div>
+							-->
+							
+					</div>
+					<!-- end message analysis-->
+					<hr>
+					
+					<!--time date analysis-->
+					<div class="row segment" id="messageAnalysis">
+						<h2 class="string segmentHead">TIME/DATE ANALYSIS</h2>
+						
+						<!-- messages/hour-->
+						<div class="row largeSubSegment">
+							<div class="col-md-4 wordsDiv" >
+								<h4 class="string top" id="busyHour">ACTIVE HOUR: </h4>
+								<h5 class="string base" id="silentHour"> LOWKEY HOUR: </h5>
+							</div>
+							<div class="col-md-8 chart" id="messageHourChart">
+							</div>
+						</div>
+						
+						<!-- messages/day-->
+						<div class="row largeSubSegment">
+							<div class="col-md-4 wordsDiv" >
+								<h4 class="string top" id="busyDay">ACTIVE DAY: </h4>
+								<h5 class="string base" id="silentDay"> LOWKEY DAY: </h5>
+							</div>
+							<div class="col-md-8 chart" id="messageDayChart">
+							</div>
+						</div>
+						
+						<!-- messages/month-->
+						<div class="row largeSubSegment">
+							<div class="col-md-4 wordsDiv" >
+								<h4 class="string top" id="busyMonth">ACTIVE MONTH: </h4>
+								<h5 class="string base" id="silentMonth"> LOWKEY MONTH: </h5>
+							</div>
+							<div class="col-md-8 chart" id="messageMonthChart">
+							</div>
+						</div>
+						
+						<div clss="row largeSubSegment">
+							<div class="col-md-1"></div>
+							<div class="col-md-10 chart" id="calendarChart"></div>
+							<div class="col-md-1"></div>
+						</div>
+						
+					</div>
+					<!--end time date analysis-->
+					<hr>
+					
+					<!--emoji analysis-->
+					<div class="row segment" id="emojiAnalysis">
+						<h2 class="string segmentHead">EMOJI ANALYSIS</h2>
+						
+						<!-- total emoji/ chart-->
+						<div class="row largeSubSegment">
+							<div class="col-md-2"> </div>
+							<div class="col-md-4 wordsDiv" >
+								<h4 class="string top" id="mostEmojis">MOST EMOJIS: </h4>
+								<h5 class="string base" id="mostEmojisName">  </h5>
+							</div>
+							<div class="col-md-6 chart" id="emojiChart">
+							</div>
+						</div>
+					</div>
+					<!-- end of emoji analysis-->
+				</div>
+			</div>
+			<!--end analysis area-->
+		</div>
+		
+	</body>
+</html>
