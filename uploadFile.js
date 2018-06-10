@@ -65,13 +65,14 @@ var group={
 	isGroup:false,
 	creator:"",
 	name:"",
+	dateCreated:"",
 	left:0
 }
 
 
 
 var lastDate,streakStart,streakEnd,currentStreak=0;
-var lastSender;
+var lastSender=null;
 
 var currentLine=0;
 
@@ -143,7 +144,6 @@ function processFile(e)
 	// start showing details
 	alterDisplay();
 	
-	//console.log(emojis);
 }
 
 //*********************************************************************
@@ -158,38 +158,28 @@ function processFile(e)
 
 function processLine(line)
 {
-	var sender;
-	var time;
-	var message;
-	var date;
+	var sender = null;
+	var time = null;
+	var message = null;
+	var date = null;
 	var start=0;
 	
-	var dateRE = /^\d+\/\d+\/\d+/; // regular expression for date matches "mm/dd/yy"
-	var timeRE = /\d+:\d{2}\s\D{2}/; // regular expression for time matches "h|hh:mm am|pm"
-	//var senderRE =/-\s\w+\s*\w*:/; // regular expression for sender 
-	var messageRE = /:.*/;//regular expression to match messgae ** fix later
+	// regular expression to test on each line
+	// first bracket matches DATE
+	// second bracket matches TIME
+	// third bracket SENDER
+	// fourth bracket MESSAGE
+	var lineRE = /(^\d+\/\d+\/\d+), (\d+:\d{2}\s\D{2}) \- (.*?): (.*)/ 
 	
-	// execute regular expressions
-	date = dateRE.exec(line.substring(start));
-	if(date!==null)
+	var testLine = lineRE.exec(line);
+	
+	if(testLine!==null)
 	{
-		date=date[0];
-		start+=(date.length+2);
+		date= testLine[1];
+		time = testLine[2];
+		sender = testLine[3];
+		message =testLine[4];
 	}
-	time = timeRE.exec(line.substring(start));
-	if(time!==null)
-	{
-		time=time[0];
-		start+=(time.length+3);
-		sender = getSender(line.substring(start)); // get sender only if there's time
-	}
-	else
-		sender = null;
-	if(sender!==null)
-		start+=(sender.length)
-	message = messageRE.exec(line.substring(start)); // fix to check lines that begin without sender
-	if(message!==null)
-		message=message[0].substring(2);
 	
 	
 	// get start date
@@ -200,7 +190,6 @@ function processLine(line)
 	
 	if(sender!==null && date!=null)
 	{
-		//console.log(sender);
 		// get actual name of sender
 		lastSender = sender;
 		processSender(sender);
@@ -215,7 +204,7 @@ function processLine(line)
 	
 	}
 	
-	else if(message===null && line.length>0) // if it's not a message
+	else if(testLine===null && line.length>0) 
 	{
 		var creator = null;
 		var join = null;
@@ -224,7 +213,7 @@ function processLine(line)
 		if(currentLine<4) // run expression on only first four lines
 		{
 			query= "created group";
-			var creatorRe = /created group/;
+			var creatorRe = /(^\d+\/\d+\/\d+), (\d+:\d{2}\s\D{2}) \- (.*?) created group (.*)/;
 			creator = creatorRe.exec(line);
 			var joinRe = /joined using this/;
 			join = joinRe.exec(line)
@@ -234,15 +223,17 @@ function processLine(line)
 		
 		if(creator!==null) // get group creator
 		{
-			group.creator = sender;
-			group.name= line.substring(creator.index+query.length+2,line.length-1);
+			group.creator = creator [3];
+			group.name= creator[4];
 			group.isGroup = true;
+			group.dateCreated=creator[1];
 		}
 		
-		else if(lastSender.length>0) // get lines that don't begin with a sender
+		else if(lastSender!==null && join===null) // get lines that don't begin with a sender
 		{
 			processMessage(line,lastSender);
 		}
+		
 	}
 	
 	
@@ -259,36 +250,6 @@ function processLine(line)
 }
 
 
-function getSender(line)
-{
-	var senderRE =/(\w+\s*\w*):/; // username
-	var sender = senderRE.exec(line);
-	
-	
-	if(sender===null) // if no name
-	{
-		//https://daxondata.com/javascript-php-and-regular-expressions-for-international-and-us-phone-number-formats
-		var senderRE =/\d?(\s?|-?|\+?|\.?)((\(\d{1,4}\))|(\d{1,3})|\s?)(\s?|-?|\.?)((\(\d{1,3}\))|(\d{1,3})|\s?)(\s?|-?|\.?)((\(\d{1,3}\))|(\d{1,3})|\s?)(\s?|-?|\.?)\d{3}(-|\.|\s)\d{4}/;
-		sender = senderRE.exec(line)
-		
-		if(sender===null)
-		{
-			return null;
-		}
-		
-		else
-		{
-			return sender[0]+"";
-		}
-	}
-	
-	else
-	{
-		if(sender[1]==="http" || sender[1] ==="https")
-			return null;
-		return sender[1]+"";
-	}
-}
 
 // adds new participant
 // counts no of messages per participant
@@ -313,52 +274,71 @@ function processSender(sender)
 // counts number of words and frequency of words
 function processMessage(message,sender)
 {
-	// split message by space get only alpha chaarcters analyze
-	message = message+'';
 	
-
-	//if(group.isGroup && message.includes("left")) // count number of people that left
-	//{
-		//console.log(message);
-		//group.left++;
-	//}
+	message = message.trim();
 	
+	// check if message indicates someone leaving the group
+	if(group.isGroup && checkLeft(message)) // count number of people that left
+	{
+		group.left++;
+	}
 	
-	if(message.trim() === "<Media omitted>")
+	// check if the message is just a change of numbe rmessage
+	else if(group.isGroup && changedNumber(message)!==false)
+	{
+		var oldNumber = changedNumber(message)[0];
+		var newNumber = changedNumber(message)[1];
+		
+		// if the old particpant exists
+		if(participants.hasOwnProperty(oldNumber))
+		{
+			participants[newNumber] = participants[oldNumber];
+			delete participants[oldNumber];
+		}
+	}
+	
+	// check if the message is just media
+	else if(message === "<Media omitted>")
 	{
 		messages.totalMedia++;
 	}
 	
 	else
-	{
+	{	
 		processEmojis(message,sender); // process emojis in the message
 		
-		var strArray = message.split(/[\s.?]+/); // split by space delimiters
+		var strArray = message.split(/[\s.?\!]+/); // split by space delimiters
 		var length = strArray.length;
 		
-		// calculate word count for each participant
-		if(participants[sender].hasOwnProperty("wordCount")===false)
-		{
-			participants[sender].wordCount = length;
-		}
 		
-		else
-		{
-			participants[sender].wordCount+=length;
-		}
 		
 		// get each word and calculate frequency
 		for(var i=0;i<length;i++)
 		{
 			var word = strArray[i].toLowerCase();
-			if(words.listOfWords.hasOwnProperty(word)===false && word.length>3) // if word not in dictionary and is greater than three
+			if(word.length>0)
 			{
-				words.listOfWords[word]=1;
-			}
-			
-			else if (words.listOfWords.hasOwnProperty(word) && word.length>3) // increase the word count for specific word
-			{
-				words.listOfWords[word]++;
+				// calculate word count for each participant
+				if(participants[sender].hasOwnProperty("wordCount")===false)
+				{
+					participants[sender].wordCount = 1;
+				}
+				
+				else
+				{
+					participants[sender].wordCount++;
+				}
+				
+				// add words to list of words
+				if(words.listOfWords.hasOwnProperty(word)===false && word.length>=3) // if word not in dictionary and is greater than three
+				{
+					words.listOfWords[word]=1;
+				}
+				
+				else if (words.listOfWords.hasOwnProperty(word) && word.length>=3) // increase the word count for specific word
+				{
+					words.listOfWords[word]++;
+				}
 			}
 			
 			// get longest word
@@ -374,6 +354,46 @@ function processMessage(message,sender)
 		{
 			messages.longestMessage = length;
 		}
+	}
+}
+
+function checkLeft(message)
+{
+	
+	var left = null;
+	
+	var leftRE = /(^\d+\/\d+\/\d+), (\d+:\d{2}\s\D{2}) \- (.*) left$/ ;
+	
+	left = leftRE.exec(message);
+	
+	
+	if(left===null)
+	{
+		return false;
+	}
+	
+	else
+	{
+		return true;
+	}
+}
+
+function changedNumber(message)
+{
+	var changed = null;
+	
+	var changedRE = /(^\d+\/\d+\/\d+), (\d+:\d{2}\s\D{2}) \- (.*) changed to (.*)/
+	
+	changed = changedRE.exec(message);
+	
+	if(changed === null)
+	{
+		return false;
+	}
+	
+	else
+	{
+		return [changed[3],changed[4]];
 	}
 }
 
@@ -414,7 +434,6 @@ function processEmojis(message,sender)
 // get hour range in which the most messages are sent
 function processTime(time,date)
 {
-	//console.log(time);
 	// split time by ':' delimiter
 	var timeSplit = time.split(":"); // get numbers
 	var timeOfDay = time.split(" "); // get am or pm
