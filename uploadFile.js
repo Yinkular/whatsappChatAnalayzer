@@ -403,14 +403,41 @@ function drawBarChartTime()
 	
 	var data = new google.visualization.DataTable();
 	
+	// add table info
 	data.addColumn('string', 'Time');
     data.addColumn('number', 'NO OF MESSAGES');
 	data.addColumn({type: 'string', role: 'style'});
 	
-	for(time in dateData.time)
-	{
-		data.addRow([time,dateData.time[time],'black']);
-	}
+	// add data to table
+	//for(time in dateData.time)
+	//{
+	//	data.addRow([time,dateData.time[time],'black']);
+	//}
+	
+	 data.addRow(["12 AM", dateData.time["12 AM"], 'black']);
+	 data.addRow(["1 AM", dateData.time["1 AM"], 'black']);
+	 data.addRow(["2 AM", dateData.time["2 AM"], 'black']);
+	 data.addRow(["3 AM", dateData.time["3 AM"], 'black']);
+	 data.addRow(["4 AM", dateData.time["4 AM"], 'black']);
+	 data.addRow(["5 AM", dateData.time["5 AM"], 'black']);
+	 data.addRow(["6 AM", dateData.time["6 AM"], 'black']);
+	 data.addRow(["7 AM", dateData.time["7 AM"], 'black']);
+	 data.addRow(["8 AM", dateData.time["8 AM"], 'black']);
+	 data.addRow(["9 AM", dateData.time["9 AM"], 'black']);
+	 data.addRow(["10 AM", dateData.time["10 AM"], 'black']);
+	 data.addRow(["11 AM", dateData.time["11 AM"], 'black']);
+	 data.addRow(["12 PM", dateData.time["12 PM"], 'black']);
+	 data.addRow(["1 PM", dateData.time["1 PM"], 'black']);
+	 data.addRow(["2 PM", dateData.time["2 PM"], 'black']);
+	 data.addRow(["3 PM", dateData.time["3 PM"], 'black']);
+	 data.addRow(["4 PM", dateData.time["4 PM"], 'black']);
+	 data.addRow(["5 PM", dateData.time["5 PM"], 'black']);
+	 data.addRow(["6 PM", dateData.time["6 PM"], 'black']);
+	 data.addRow(["7 PM", dateData.time["7 PM"], 'black']);
+	 data.addRow(["8 PM", dateData.time["8 PM"], 'black']);
+	 data.addRow(["9 PM", dateData.time["9 PM"], 'black']);
+	 data.addRow(["10 PM", dateData.time["10 PM"], 'black']);
+	 data.addRow(["11 PM", dateData.time["11 PM"], 'black']);
 	
 	var options = {
 		title: "TIME/MESSAGE FREQUENCY",
